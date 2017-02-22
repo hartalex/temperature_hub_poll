@@ -1,0 +1,3 @@
+sudo docker rm -f temp_hub_poll
+sudo docker build -t temperature_hub_poll:latest .
+sudo docker run --name temp_hub_poll --restart always -d -v /home/hartalex/polllogdir:/var/log --network="host" temperature_hub_poll:latest
