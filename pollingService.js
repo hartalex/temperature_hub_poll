@@ -3,7 +3,7 @@ require('isomorphic-fetch')
 
 var config = require('./config')
 
-function pollForData () {
+module.exports = function pollForData () {
   const time = new Date()
   const timestring = time.toISOString()
   console.log('polling for temperatures')
@@ -39,5 +39,3 @@ function pollForData () {
     console.log(err)
   })
 }
-
-pollForData()

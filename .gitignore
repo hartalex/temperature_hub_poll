@@ -1,3 +1,6 @@
 node_modules
 *.log
 config.js
+.nyc_output
+coverage
+lcov.info
