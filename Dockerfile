@@ -1,4 +1,5 @@
-FROM mhart/alpine-node:7.5
+FROM mhart/alpine-node:8
+ENV NODE_ENV production
 RUN mkdir /root/temperature_hub_poll
 COPY . /root/temperature_hub_poll/
 WORKDIR /root/temperature_hub_poll
