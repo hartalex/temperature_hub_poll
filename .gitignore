@@ -4,3 +4,4 @@ node_modules
 coverage
 lcov.info
 package-lock.json
+build/
