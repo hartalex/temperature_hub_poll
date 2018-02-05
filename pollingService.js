@@ -1,7 +1,8 @@
 require('es6-promise').polyfill()
 require('isomorphic-fetch')
 
-var config = require('./config')
+const config = require('./config')
+const slackPost = require('./slack')(config.slackUrl)
 
 module.exports = function pollForData () {
   const time = new Date()
@@ -9,14 +10,14 @@ module.exports = function pollForData () {
   console.log('polling for temperatures')
   fetch(config.hubUrl + '/services/list').then(function (response) {
     if (response.status >= 400) {
-      throw new Error('Bad response from server')
+      throw new Error('Bad response from server at ' + config.hubUrl + '/services/list')
     }
     return response.json()
   }).then(function (services) {
     services.forEach(function (element) {
       fetch(element.url).then(function (response) {
         if (response.status >= 400) {
-          throw new Error('Bad response from server')
+          throw new Error('Bad response from server at ' + element.url)
         }
         return response.json()
       }).then(function (sensorData) {
@@ -29,13 +30,27 @@ module.exports = function pollForData () {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify(sensor)
+          }).then(function (response) {
+            if (sensor.sensorId.startsWith('gd-')) {
+              slackPost(JSON.stringify(response)).catch(function (error) {
+                console.log(error)
+              })
+            }
+          }).catch(function (err) {
+            slackPost(err).catch(function (error) {
+              console.log(error)
+            })
           })
         })
       }).catch(function (err) {
-        console.log(err)
+        slackPost(err).catch(function (error) {
+          console.log(error)
+        })
       })
     })
   }).catch(function (err) {
-    console.log(err)
+    slackPost(err).catch(function (error) {
+      console.log(error)
+    })
   })
 }
