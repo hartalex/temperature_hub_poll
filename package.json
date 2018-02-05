@@ -7,7 +7,7 @@
     "test": "nyc mocha test",
     "coverage": "nyc report --reporter=text-lcov > lcov.info",
     "clean": "rimraf build",
-    "build": "npm run clean && babel main.js pollingService.js -d build/",
+    "build": "npm run clean && babel main.js pollingService.js slack.js -d build/",
     "lint": "eslint main.js pollingService.js",
     "start": "node main.js"
   },
@@ -23,7 +23,8 @@
   "homepage": "https://github.com/hartalex/temperature_hub_poll#readme",
   "dependencies": {
     "es6-promise": "^4.1.1",
-    "isomorphic-fetch": "^2.2.1"
+    "isomorphic-fetch": "^2.2.1",
+    "request": "^2.83.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

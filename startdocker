@@ -1,3 +1,3 @@
 sudo docker rm -f temp_hub_poll
 sudo docker build -t temperature_hub_poll:latest .
-sudo docker run --name temp_hub_poll --restart always -d -v /home/hartalex/temp_hub_poll/logdir:/var/log --network="host" gcr.io/hartonline-cloud/temperature_hub_poll:master--011344fbfd945b4a755f0aa5aa033c90dbe8a4b8
+sudo docker run --name temp_hub_poll --restart always -d -v /home/hartalex/temp_hub_poll/logdir:/var/log -v /home/hartalex/temp_hub_poll/config.js:/root/temperature_hub_poll/config.js --network="host" temperature_hub_poll:latest
