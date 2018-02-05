@@ -32,24 +32,26 @@ module.exports = function pollForData () {
             body: JSON.stringify(sensor)
           }).then(function (response) {
             if (sensor.sensorId.startsWith('gd-')) {
-              slackPost(JSON.stringify(response)).catch(function (error) {
+	      if (result in response.json()) {
+		      slackPost.SlackPost(JSON.stringify(response.json())).catch(function (error) {
                 console.log(error)
               })
+	      }
             }
           }).catch(function (err) {
-            slackPost(err).catch(function (error) {
+            slackPost.SlackPost(err).catch(function (error) {
               console.log(error)
             })
           })
         })
       }).catch(function (err) {
-        slackPost(err).catch(function (error) {
+        slackPost.SlackPost(err).catch(function (error) {
           console.log(error)
         })
       })
     })
   }).catch(function (err) {
-    slackPost(err).catch(function (error) {
+    slackPost.SlackPost(err).catch(function (error) {
       console.log(error)
     })
   })
