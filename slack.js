@@ -11,7 +11,7 @@ module.exports = function (slackUrl) {
 		  strmsg = JSON.stringify(message)
 	  }
 
-          var slackData = {'text': message}
+          var slackData = {'text': strmsg}
           request({
             url: slackUrl,
             method: 'POST',
