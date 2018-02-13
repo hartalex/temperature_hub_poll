@@ -4,6 +4,13 @@ module.exports = function (slackUrl) {
     SlackPost: function (message) {
       return new Promise(
         function (resolve, reject) {
+          var strmsg
+	  if (message instanceof Error) {
+		  strmsg = message.message
+	  } else {
+		  strmsg = JSON.stringify(message)
+	  }
+
           var slackData = {'text': message}
           request({
             url: slackUrl,

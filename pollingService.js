@@ -30,14 +30,6 @@ module.exports = function pollForData () {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify(sensor)
-          }).then(function (response) {
-            if (sensor.sensorId.startsWith('gd-')) {
-	      if (result in response.json()) {
-		      slackPost.SlackPost(JSON.stringify(response.json())).catch(function (error) {
-                console.log(error)
-              })
-	      }
-            }
           }).catch(function (err) {
             slackPost.SlackPost(err).catch(function (error) {
               console.log(error)
