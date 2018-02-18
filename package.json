@@ -7,7 +7,7 @@
     "test": "nyc mocha test",
     "coverage": "nyc report --reporter=text-lcov > lcov.info",
     "clean": "rimraf build",
-    "build": "npm run clean && babel main.js pollingService.js slack.js -d build/",
+    "build": "npm run clean && babel main.js pollingService.js slack.js websockclient.js -d build/",
     "lint": "eslint main.js pollingService.js",
     "start": "node main.js",
     "websocket": "node websockclient.js"
