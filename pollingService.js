@@ -15,32 +15,34 @@ module.exports = function pollForData () {
     return response.json()
   }).then(function (services) {
     services.forEach(function (element) {
-      fetch(element.url).then(function (response) {
-        if (response.status >= 400) {
-          throw new Error('Bad response from server at ' + element.url)
-        }
-        return response.json()
-      }).then(function (sensorData) {
-        sensorData.forEach(function (sensor) {
-          sensor.utc_timestamp = timestring
-          fetch(config.hubUrl + '/data/add', {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(sensor)
-          }).catch(function (err) {
-            slackPost.SlackPost(err).catch(function (error) {
-              console.log(error)
+      if (element.type !== 'ws') {
+        fetch(element.url).then(function (response) {
+          if (response.status >= 400) {
+            throw new Error('Bad response from server at ' + element.url)
+          }
+          return response.json()
+        }).then(function (sensorData) {
+          sensorData.forEach(function (sensor) {
+            sensor.utc_timestamp = timestring
+            fetch(config.hubUrl + '/data/add', {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(sensor)
+            }).catch(function (err) {
+              slackPost.SlackPost(err).catch(function (error) {
+                console.log(error)
+              })
             })
           })
+        }).catch(function (err) {
+          slackPost.SlackPost(err).catch(function (error) {
+            console.log(error)
+          })
         })
-      }).catch(function (err) {
-        slackPost.SlackPost(err).catch(function (error) {
-          console.log(error)
-        })
-      })
+      }
     })
   }).catch(function (err) {
     slackPost.SlackPost(err).catch(function (error) {
