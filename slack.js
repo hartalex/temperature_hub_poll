@@ -5,11 +5,11 @@ module.exports = function (slackUrl) {
       return new Promise(
         function (resolve, reject) {
           var strmsg
-	  if (message instanceof Error) {
-		  strmsg = message.message
-	  } else {
-		  strmsg = JSON.stringify(message)
-	  }
+          if (message instanceof Error) {
+            strmsg = message.message
+          } else {
+            strmsg = JSON.stringify(message)
+          }
 
           var slackData = {'text': strmsg}
           request({

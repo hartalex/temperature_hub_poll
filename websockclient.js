@@ -5,17 +5,21 @@ const config = require('./config')
 const slackPost = require('./slack')(config.slackUrl)
 var ws
 
-const close = function () {
-  logging.log('info', 'WebSocket Closed')
-  tryreconnect()
+const close = (url) => {
+  return () => {
+    logging.log('info', 'WebSocket Closed')
+    tryreconnect(url)
+  }
 }
 
-const errorfunc = function (error) {
-  logging.log('error', 'WebSocket Issue', error)
-  tryreconnect()
+const errorfunc = (url) => {
+  return (error) => {
+    logging.log('error', 'WebSocket Issue', error)
+    tryreconnect(url)
+  }
 }
 
-const incomming = function (message) {
+const incomming = (message) => {
   var obj = JSON.parse(message)
   logging.log('debug', 'WebSocket Receive Message: ', obj)
   const time = new Date()
@@ -28,29 +32,48 @@ const incomming = function (message) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(obj)
-  }).catch(function (err) {
-    slackPost.SlackPost(err).catch(function (error) {
+  }).catch((err) => {
+    slackPost.SlackPost(err).catch((error) => {
       console.log(error)
     })
   })
 }
 
-const reconnect = () => {
-  logging.log('info', 'Connect to Websocket')
-  try {
-    ws = new WebSocket('ws://home.hartcode.com:8844')
-    ws.on('message', incomming)
-    ws.on('close', close)
-    ws.on('error', errorfunc)
-  } catch (error) {
-    logging.log('error', 'WebSocket Connection Error: ', error)
-    tryreconnect()
-    logging.log('error', 'WebSocket Connection Error: ', ws)
+const reconnect = (url) => {
+  return () => {
+    logging.log('info', 'Connect to Websocket')
+    try {
+      ws = new WebSocket(url) // 'ws://home.hartcode.com:8844'
+      ws.on('message', incomming)
+      ws.on('close', close(url))
+      ws.on('error', errorfunc(url))
+    } catch (error) {
+      logging.log('error', 'WebSocket Connection Error: ', error)
+      tryreconnect(url)
+      logging.log('error', 'WebSocket Connection Error: ', ws)
+    }
   }
 }
 
-const tryreconnect = () => {
-  setTimeout(reconnect, 30000) // 30 seconds
+const tryreconnect = (url) => {
+  setTimeout(reconnect(url), 30000) // 30 seconds
 }
 
-reconnect()
+fetch(config.hubUrl + '/services/list').then((response) => {
+  if (response.status >= 400) {
+    throw new Error('Bad response from server at ' + config.hubUrl + '/services/list')
+  }
+  return response.json()
+}).then((services) => {
+  services.forEach((element) => {
+    logging.log('info', 'Found Service', element)
+    if (element.type === 'ws') {
+      logging.log('info', 'Connecting To Service', element)
+      reconnect(element.url)()
+    }
+  })
+}).catch((err) => {
+  slackPost.SlackPost(err).catch((error) => {
+    console.log(error)
+  })
+})
