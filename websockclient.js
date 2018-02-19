@@ -21,7 +21,7 @@ const errorfunc = (url) => {
 
 const incomming = (message) => {
   var obj = JSON.parse(message)
-  logging.log('debug', 'WebSocket Receive Message: ', obj)
+  logging.log('info', 'WebSocket Receive Message: ', obj)
   const time = new Date()
   const timestring = time.toISOString()
   obj.utc_timestamp = timestring

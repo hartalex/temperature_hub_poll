@@ -15,7 +15,9 @@ module.exports = function pollForData () {
     return response.json()
   }).then(function (services) {
     services.forEach(function (element) {
+      console.log('found service ' + JSON.stringify(element))
       if (element.type !== 'ws') {
+      console.log('checking service ' + JSON.stringify(element))
         fetch(element.url).then(function (response) {
           if (response.status >= 400) {
             throw new Error('Bad response from server at ' + element.url)
