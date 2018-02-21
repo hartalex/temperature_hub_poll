@@ -1,9 +1,15 @@
 const WebSocket = require('ws')
-const logging = require('winston')
+const winston = require('winston')
 require('isomorphic-fetch')
 const config = require('./config')
 const slackPost = require('./slack')(config.slackUrl)
 var ws
+const logging = new (winston.Logger)({
+	  transports: [
+		      new (winston.transports.Console)({timestamp: true})
+		    ]
+})
+
 
 const close = (url) => {
   return () => {
@@ -34,7 +40,7 @@ const incomming = (message) => {
     body: JSON.stringify(obj)
   }).catch((err) => {
     slackPost.SlackPost(err).catch((error) => {
-      console.log(error)
+      log.error('Data Add error', error)
     })
   })
 }
@@ -74,6 +80,6 @@ fetch(config.hubUrl + '/services/list').then((response) => {
   })
 }).catch((err) => {
   slackPost.SlackPost(err).catch((error) => {
-    console.log(error)
+     log.error('Service List error', error)
   })
 })
