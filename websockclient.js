@@ -45,6 +45,10 @@ const incomming = (message) => {
   })
 }
 
+const heartbeat = () => {
+  logging.log('info', 'Heartbeat');
+}
+
 const reconnect = (url) => {
   return () => {
     logging.log('info', 'Connect to Websocket')
@@ -53,6 +57,7 @@ const reconnect = (url) => {
       ws.on('message', incomming)
       ws.on('close', close(url))
       ws.on('error', errorfunc(url))
+      ws.on('ping', heartbeat)
     } catch (error) {
       logging.log('error', 'WebSocket Connection Error: ', error)
       tryreconnect(url)
