@@ -3,6 +3,9 @@ require('isomorphic-fetch')
 
 const config = require('./config')
 const slackPost = require('./slack')(config.slackUrl)
+function isArray (value) {
+  return value && typeof value === 'object' && value.constructor === Array;
+};
 
 module.exports = function pollForData () {
   const time = new Date()
@@ -24,21 +27,27 @@ module.exports = function pollForData () {
           }
           return response.json()
         }).then(function (sensorData) {
-          sensorData.forEach(function (sensor) {
-            sensor.utc_timestamp = timestring
-            fetch(config.hubUrl + '/data/add', {
-              method: 'POST',
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(sensor)
-            }).catch(function (err) {
-              slackPost.SlackPost(err).catch(function (error) {
-                console.log(error)
+          if (isArray(sensorData)) {
+            sensorData.forEach(function (sensor) {
+              sensor.utc_timestamp = timestring
+              fetch(config.hubUrl + '/data/add', {
+                method: 'POST',
+                headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(sensor)
+              }).catch(function (err) {
+                slackPost.SlackPost(err).catch(function (error) {
+                  console.log(error)
+                })
               })
             })
-          })
+          } else {
+            slackPost.SlackPost('array data not found').catch(function (error) {
+              console.log(error)
+            })
+          }
         }).catch(function (err) {
           slackPost.SlackPost(err).catch(function (error) {
             console.log(error)

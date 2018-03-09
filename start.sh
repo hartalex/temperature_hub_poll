@@ -1,2 +1,2 @@
 #!/bin/sh
-crond && npm run websocket
+crond -f
