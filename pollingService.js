@@ -3,9 +3,9 @@ require('isomorphic-fetch')
 
 const config = require('./config')
 const slackPost = require('./slack')(config.slackUrl)
-function isArray (value) {
-  return value && typeof value === 'object' && value.constructor === Array;
-};
+const isArray = (value) => {
+  return value && typeof value === 'object' && value.constructor === Array
+}
 
 module.exports = function pollForData () {
   const time = new Date()
