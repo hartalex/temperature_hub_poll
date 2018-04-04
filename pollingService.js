@@ -1,6 +1,11 @@
 require('es6-promise').polyfill()
 require('isomorphic-fetch')
-const logging = require('winston')
+const winston = require('winston')
+const logging = new (winston.Logger)({
+  transports: [
+    new (winston.transports.Console)({timestamp: true})
+  ]
+})
 
 const config = require('./config')
 const slackPost = require('./slack')(config.slackUrl)

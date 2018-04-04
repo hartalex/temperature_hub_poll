@@ -1,3 +1,1 @@
-const pollingService = require('./pollingService')
-
-pollingService()
+require('./pollingService')()
