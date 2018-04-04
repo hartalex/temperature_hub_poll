@@ -1,14 +1,14 @@
 const request = require('request')
 module.exports = function (slackUrl) {
   return {
-    SlackPost: function (message) {
+    SlackPost: function (message, message2) {
       return new Promise(
         function (resolve, reject) {
           var strmsg
           if (message instanceof Error) {
             strmsg = message.message
           } else {
-            strmsg = JSON.stringify(message)
+            strmsg = message2 + ' ' + JSON.stringify(message)
           }
 
           var slackData = {'text': strmsg}
