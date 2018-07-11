@@ -85,9 +85,9 @@ module.exports = function pollForData () {
     fetch(serviceUrl, {timeout: fetchTimeoutMs})
       .then(handleFetchError(serviceUrl))
       .then(function (services) {
-        if (isArray(services)) {
+        if (isArray(services.data)) {
           logging.log('info', 'found services', services)
-          services.forEach(processService(timestring))
+          services.data.forEach(processService(timestring))
         } else {
           logErrorString('Services data array not found')
         }
