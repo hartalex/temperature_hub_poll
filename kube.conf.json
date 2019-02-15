@@ -2,9 +2,9 @@
   "apiVersion": "apps/v1",
   "kind": "Deployment",
   "metadata": {
-    "name": "challenge-of-the-day",
+    "name": "temperature_hub_poll",
     "labels": {
-      "app": "challenge-of-the-day",
+      "app": "temperature_hub_poll",
       "version": "v1"
     }
   },
@@ -12,20 +12,20 @@
     "replicas": 1,
     "selector": {
       "matchLabels": {
-        "app": "challenge-of-the-day"
+        "app": "temperature_hub_poll"
       }
     },
     "template": {
       "metadata": {
         "labels": {
-          "app": "challenge-of-the-day"
+          "app": "temperature_hub_poll"
         }
       },
       "spec": {
         "containers": [
           {
             "name": "application",
-            "image": "gcr.io/hartonline-cloud/challenge-of-the-day:(TRAVIS_COMMIT)",
+            "image": "gcr.io/hartonline-cloud/temperature_hub_poll:(TRAVIS_COMMIT)",
             "resources": {
               "limits": {
                 "cpu": ".05",
