@@ -2,9 +2,9 @@
   "apiVersion": "apps/v1",
   "kind": "Deployment",
   "metadata": {
-    "name": "temperature_hub_poll",
+    "name": "temperature-hub-poll",
     "labels": {
-      "app": "temperature_hub_poll",
+      "app": "temperature-hub-poll",
       "version": "v1"
     }
   },
@@ -12,20 +12,20 @@
     "replicas": 1,
     "selector": {
       "matchLabels": {
-        "app": "temperature_hub_poll"
+        "app": "temperature-hub-poll"
       }
     },
     "template": {
       "metadata": {
         "labels": {
-          "app": "temperature_hub_poll"
+          "app": "temperature-hub-poll"
         }
       },
       "spec": {
         "containers": [
           {
             "name": "application",
-            "image": "gcr.io/hartonline-cloud/temperature_hub_poll:(TRAVIS_COMMIT)",
+            "image": "gcr.io/hartonline-cloud/temperature-hub-poll:(TRAVIS_COMMIT)",
             "resources": {
               "limits": {
                 "cpu": ".05",
