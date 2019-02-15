@@ -1,0 +1,51 @@
+{
+  "apiVersion": "apps/v1",
+  "kind": "Deployment",
+  "metadata": {
+    "name": "challenge-of-the-day",
+    "labels": {
+      "app": "challenge-of-the-day",
+      "version": "v1"
+    }
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "matchLabels": {
+        "app": "challenge-of-the-day"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "challenge-of-the-day"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "application",
+            "image": "gcr.io/hartonline-cloud/challenge-of-the-day:(TRAVIS_COMMIT)",
+            "resources": {
+              "limits": {
+                "cpu": ".05",
+                "memory": "100Mi"
+              }
+            },
+            "env": [
+              {
+                "name": "slackUrl",
+                "valueFrom": {
+                  "secretKeyRef": {
+                    "name": "temperature-hub-poll-secret",
+                    "key": "slackUrl"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

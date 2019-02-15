@@ -10,7 +10,8 @@
     "build": "npm run clean && babel main.js pollingService.js slack.js websockclient.js -d build/",
     "lint": "eslint main.js pollingService.js",
     "start": "node main.js",
-    "websocket": "node websockclient.js"
+    "websocket": "node websockclient.js",
+    "cleanOldContainers": "node scripts/cleanOldContainers.js"
   },
   "repository": {
     "type": "git",
