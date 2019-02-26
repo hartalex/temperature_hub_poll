@@ -2,6 +2,6 @@
 // replace with your own configuration
 
 module.exports = {
-  hubUrl: 'http://hub.hartcode.com',
+  hubUrl: 'http://api.hub.hartcode.com',
   slackUrl: process.env.slackUrl
 }
