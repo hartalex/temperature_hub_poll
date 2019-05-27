@@ -3,5 +3,6 @@
 
 module.exports = {
   hubUrl: 'http://api.hub.hartcode.com',
-  slackUrl: process.env.slackUrl
+  slackUrl: process.env.slackUrl,
+  shouldSlack: false
 }
